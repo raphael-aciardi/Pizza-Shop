@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { useMutation } from "@tanstack/react-query"
 import { signIn } from "@/api/sign-in"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const signInForm = z.object({
     email: z.string().email(),
 })
