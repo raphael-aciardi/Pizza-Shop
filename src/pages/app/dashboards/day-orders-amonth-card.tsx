@@ -1,4 +1,4 @@
-import { getDayOrdersAmount } from "@/api/get-month-orders-amount";
+import { getDayOrdersAmount } from "@/api/get-day-orders-amount";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { Utensils } from "lucide-react";
@@ -32,7 +32,7 @@ export function DayOrdersAmonthCard() {
               ) : (
                 <>
                   <span className="text-rose-500 dark:text-rose-400">
-                    -{dayOrdersAmount.diffFromYesterday}
+                    {dayOrdersAmount.diffFromYesterday}
                   </span>{' '}
                 </>
               )}
