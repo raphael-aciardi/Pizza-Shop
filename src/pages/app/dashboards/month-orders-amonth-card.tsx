@@ -2,6 +2,7 @@ import { getMonthOrdersAmount } from "@/api/get-month-orders-amount";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { Utensils } from "lucide-react";
+import { MetricCardSkeleton } from "./metric-card-skeleton";
 
 export function MonthOrdersAmonthCard() {
 
@@ -18,7 +19,7 @@ export function MonthOrdersAmonthCard() {
       </CardHeader>
       <CardContent className="space-y-2">
 
-        {monthOrdersAmount && (
+        {monthOrdersAmount ? (
           <>
             <span className="text-2xl font-bold tracking-tight">
               {monthOrdersAmount.amount.toLocaleString('pt-BR')}
@@ -27,13 +28,13 @@ export function MonthOrdersAmonthCard() {
               {monthOrdersAmount.diffFromLastMonth >= 0 ? (
                 <>
                   <span className="text-emerald-500 dark:text-emerald-400">
-                    +{monthOrdersAmount.diffFromLastMonth}
+                    +{monthOrdersAmount.diffFromLastMonth}%
                   </span>{' '}
                 </>
               ) : (
                 <>
                   <span className="text-rose-500 dark:text-rose-400">
-                    {monthOrdersAmount.diffFromLastMonth}
+                    {monthOrdersAmount.diffFromLastMonth}%
                   </span>{' '}
                 </>
               )}
@@ -41,7 +42,9 @@ export function MonthOrdersAmonthCard() {
             </p>
 
           </>
-        )}
+        ) : (
+        <MetricCardSkeleton />
+                )}
 
       </CardContent>
     </Card>

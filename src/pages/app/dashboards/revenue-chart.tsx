@@ -16,17 +16,38 @@ import {
   XAxis,
   CartesianGrid
 } from 'recharts';
+import { useQuery } from "@tanstack/react-query";
+import { getDailyRevenueInPeriod } from "@/api/get-daily-revenue-in-period";
+import { Label } from "@/components/ui/label";
+import { useMemo, useState } from "react";
+import { DateRange } from "react-day-picker";
+import { subDays } from "date-fns";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { Loader2 } from "lucide-react";
 
 export function RevenueChart() {
-  const data = [
-    { date: '10/12', revenue: 1200 },
-    { date: '11/12', revenue: 800 },
-    { date: '12/12', revenue: 900 },
-    { date: '13/12', revenue: 400 },
-    { date: '14/12', revenue: 2300 },
-    { date: '15/12', revenue: 800 },
-    { date: '16/12', revenue: 640 },
-  ];
+
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: subDays(new Date(), 7),
+    to: new Date(),
+  });
+
+  const { data: dailyRevenueInPeriod } = useQuery({
+    queryKey: ['metrics', 'daily-revenue-in-period', dateRange],
+    queryFn: () => getDailyRevenueInPeriod({
+      from: dateRange?.from,
+      to: dateRange?.to
+    }),
+  })
+
+  const chartData = useMemo(() => {
+    return dailyRevenueInPeriod?.map(chartItem => {
+      return {
+        date: chartItem.date,
+        receipt: chartItem.receipt / 100,
+      }
+    })
+  }, [dailyRevenueInPeriod])
 
   return (
     <Card className="col-span-6">
@@ -39,32 +60,46 @@ export function RevenueChart() {
             Receita diária no período
           </CardDescription>
         </div>
+
+        <div className="flex items-center gap-3">
+          <Label>
+            Preíodo
+          </Label>
+          <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+        </div>
+
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={240}>
-          <LineChart data={data} style={{ fontSize: "12px" }}>
-            <XAxis dataKey="date" tickLine={false} axisLine={false} dy={16} />
-            <YAxis
-              width={90}
-              stroke="#888"
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(value: number) =>
-                value.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL"
-                })
-              }
-            />
-            <CartesianGrid vertical={false} className="stroke-muted" />
-            <Line
-              stroke={color.purple[400]}
-              type="linear"
-              strokeWidth={2}
-              dataKey="revenue"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {chartData ? (
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart data={dailyRevenueInPeriod} style={{ fontSize: "12px" }}>
+              <XAxis dataKey="date" tickLine={false} axisLine={false} dy={16} />
+              <YAxis
+                width={90}
+                stroke="#888"
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(value: number) =>
+                  value.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                  })
+                }
+              />
+              <CartesianGrid vertical={false} className="stroke-muted" />
+              <Line
+                stroke={color.purple[400]}
+                type="linear"
+                strokeWidth={2}
+                dataKey="receipt"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex h-[240px] items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        )}
       </CardContent>
     </Card>
   );
