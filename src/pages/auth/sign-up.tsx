@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import { registerRestaurant } from "@/api/register-restaurant"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const signUpForm = z.object({
     restaurantName: z.string(),
     managerName: z.string(),
@@ -31,7 +32,7 @@ export function SignUp() {
 
         try {
 
-            registerRestaurantFn({
+            await registerRestaurantFn({
                 restaurantName: data.restaurantName,
                 managerName: data.managerName,
                 phone: data.phone,

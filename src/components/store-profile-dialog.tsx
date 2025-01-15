@@ -4,7 +4,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getManagedRestaurant, GetManageRestaurant } from "@/api/get-managed-restaurant";
+import { getManagedRestaurant, GetManagedRestaurantResponse } from "@/api/get-managed-restaurant";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,10 +24,10 @@ export function StoreProfileDialog() {
   type StoreProfileSchema = z.infer<typeof storeProfileSchema>
 
   function updateManagedRestaurantCache({ name, description }: StoreProfileSchema) {
-    const cached = queryClient.getQueryData<GetManageRestaurant>(['managed-restaurant']);
+    const cached = queryClient.getQueryData<GetManagedRestaurantResponse>(['managed-restaurant']);
 
     if (cached) {
-      queryClient.setQueryData<GetManageRestaurant>(['managed-restaurant'], {
+      queryClient.setQueryData<GetManagedRestaurantResponse>(['managed-restaurant'], {
         ...cached,
         name,
         description
