@@ -3,6 +3,8 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
 
+  testMatch: /.*\.e2e-spec\.ts$/,
+
   fullyParallel: true,
 
   forbidOnly: !!process.env.CI,
@@ -12,13 +14,13 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   use: {
-    baseURL: 'http://127.0.0.1:8080',
+    baseURL: 'http://localhost:8070',
   },
 
 
   webServer: {
     command: 'npm run dev:mock',
-    url: 'http://127.0.0.1:8080',
+    url: 'http://localhost:8070',
     reuseExistingServer: !process.env.CI,
   },
 

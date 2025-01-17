@@ -38,7 +38,7 @@ export function MonthOrdersAmonthCard() {
                   </span>{' '}
                 </>
               )}
-              em relação a mês passado
+              em relação ao mês passado
             </p>
 
           </>

@@ -46,7 +46,7 @@ export function SingIn() {
                 }
             })
         } catch {
-            toast.error("credenciais inválidas")
+            toast.error("Credenciais inválidas")
         }
     }
 

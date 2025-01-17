@@ -39,7 +39,7 @@ export function MonthRevenueCard() {
                   </span>{' '}
                 </>
               )}
-              em relação a mês passado
+              em relação ao mês passado
             </p>
           </>
         ) : (
